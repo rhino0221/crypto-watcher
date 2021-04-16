@@ -38,15 +38,14 @@ def fetch_crypto_data(symbol: str) -> Tuple[float, float, List[Tuple[float, ...]
 
 
 def render_candlestick(ohlc: Tuple[float, ...], x: int, y_transformer: Callable[[float], int], draw: ImageDraw):
-    color = (255, 55, 55, 255) if ohlc[3] < ohlc[0] else (55, 255, 55, 255)
     draw.rectangle((x, y_transformer(
-        max(ohlc[0], ohlc[3])), x + 2, y_transformer(min(ohlc[0], ohlc[3]))), fill=color)
+        max(ohlc[0], ohlc[3])), x + 2, y_transformer(min(ohlc[0], ohlc[3]))), fill=1)
     draw.line(
-        (x + 1, y_transformer(ohlc[1]), x + 1, y_transformer(ohlc[2])), fill=color)
+        (x + 1, y_transformer(ohlc[1]), x + 1, y_transformer(ohlc[2])), fill=1)
 
 
-def render_ohlc_data(ohlc: List[Tuple[float, ...]], draw: ImageDraw):
-    X_START = 18
+def render_ohlc_data(xPos: int, ohlc: List[Tuple[float, ...]], draw: ImageDraw):
+    X_START = xPos
     Y_START = 54
     HEIGHT = 50
 
@@ -75,34 +74,54 @@ def main():
     lcd.LCD_Init()
     lcd.LCD_Clear()
 
-    img = Image.new("RGB", (lcd.width, lcd.height))
+    img = Image.new("1", (lcd.width, lcd.height), 255)
     font = ImageFont.truetype("OpenSans-Regular.ttf", 20)
     font_small = ImageFont.truetype("OpenSans-Regular.ttf", 16)
     font_tiny = ImageFont.truetype("OpenSans-Regular.ttf", 12)
 
-    timezone = pytz.timezone("US/Eastern")
+    timezone = pytz.timezone("Europe/Lisbon")
     while True:
-        price, diff, ohlc = fetch_crypto_data("btcusdt") # TODO: use any binance symbol you want (Ex.: DOGE = dogeusdt)
 
         draw = ImageDraw.Draw(img)
-        draw.rectangle((0, 0, lcd.width, lcd.height), fill=(0, 0, 0, 0))
-        draw.text((8, 5), text="{}$".format(
-            price_to_str(price)), font=font, fill=(255, 255, 255, 255))
+        draw.rectangle((0, 0, lcd.width, lcd.height), fill=0)
+        
+        #BTC
+        price, diff, ohlc = fetch_crypto_data("btcusdt")
+        
+        draw.text((8, 5), text="BTC {}$".format(
+            price_to_str(price)), font=font, fill=1)
 
         diff_symbol = ""
-        diff_color = (255, 255, 255, 255)
         if diff > 0:
             diff_symbol = "+"
-            diff_color = (55, 255, 55, 255)
         if diff < 0:
-            diff_color = (255, 55, 55, 255)
+            diff_symbol = "-"
 
         draw.text((8, 30), text="{}{}$".format(diff_symbol,
-                                               price_to_str(diff)), font=font_small, fill=diff_color)
-        draw.text((6, 106), text=datetime.datetime.now(timezone).strftime("%Y-%m-%d %H:%M:%S"),
-                  font=font_tiny, fill=(200, 200, 200, 255))
+                                               price_to_str(diff)), font=font_small, fill=1)
+        
+        render_ohlc_data(18, ohlc, draw)
+        
+        #ETH
+        price, diff, ohlc = fetch_crypto_data("ethusdt")
+        
+        draw.text((130, 5), text="ETH {}$".format(
+            price_to_str(price)), font=font, fill=1)
 
-        render_ohlc_data(ohlc, draw)
+        diff_symbol = ""
+        if diff > 0:
+            diff_symbol = "+"
+        if diff < 0:
+            diff_symbol = "-"
+
+        draw.text((130, 30), text="{}{}$".format(diff_symbol,
+                                               price_to_str(diff)), font=font_small, fill=1)
+        
+        render_ohlc_data(138, ohlc, draw)
+        
+        #Last update time
+        draw.text((6, 106), text=datetime.datetime.now(timezone).strftime("%Y-%m-%d %H:%M:%S"),
+                  font=font_tiny, fill=1)
 
         lcd.LCD_ShowImage(img)
         time.sleep(30)

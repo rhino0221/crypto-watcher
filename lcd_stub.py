@@ -1,8 +1,8 @@
 
 class LCD(object):
     def __init__(self):
-        self.width = 128
-        self.height = 128
+        self.width = 250
+        self.height = 122
 
     def LCD_Init(self):
         pass
