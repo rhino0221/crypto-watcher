@@ -1,6 +1,5 @@
-# TODO: Uncomment the lcd_1in44 line and comment the lcd_stub one if you want to run it on the display
-# from lcd_1in44 import LCD
-# from lcd_stub import LCD
+# TODO: Uncomment the epd_2in13_V2 line and comment the epd_stub one if you want to run it on the display
+# from epd_stub import LCD
 from epd2in13_V2 import EPD
 
 from PIL import Image, ImageDraw, ImageFont

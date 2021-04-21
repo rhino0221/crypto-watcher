@@ -1,13 +1,13 @@
 
-class LCD(object):
+class EPD(object):
     def __init__(self):
         self.width = 250
         self.height = 122
 
-    def LCD_Init(self):
+    def init(self):
         pass
 
-    def LCD_Clear(self):
+    def Clear(self):
         pass
 
     def LCD_ShowImage(self, image):
