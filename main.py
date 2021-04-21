@@ -13,6 +13,7 @@ import pytz
 import math
 import logging
 import requests
+import epdconfig
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -142,5 +143,5 @@ except IOError as e:
     
 except KeyboardInterrupt:    
     logging.info("ctrl + c:")
-    epd2in13_V2.epdconfig.module_exit()
+    epdconfig.module_exit()
     exit()
