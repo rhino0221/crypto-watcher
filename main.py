@@ -11,7 +11,7 @@ import time
 import datetime
 import pytz
 import math
-
+import logging
 import requests
 
 
@@ -73,9 +73,12 @@ def price_to_str(price: float) -> str:
 def main():
 
     epd = EPD()
+    logging.info("Initiating EPD...")
     epd.init(epd.FULL_UPDATE)
+    logging.info("Clearing display...")
     epd.Clear(0xFF)
 
+    logging.info("Starting...")
     img = Image.new("1", (epd.width, epd.height), 255)
     font = ImageFont.truetype("OpenSans-Regular.ttf", 20)
     font_small = ImageFont.truetype("OpenSans-Regular.ttf", 16)
@@ -125,7 +128,7 @@ def main():
         draw.text((6, 106), text=datetime.datetime.now(timezone).strftime("%Y-%m-%d %H:%M:%S"),
                   font=font_tiny, fill=1)
 
-        epd.display(img)
+        epd.display(epd.getbuffer(img))
         time.sleep(30)
 
 
