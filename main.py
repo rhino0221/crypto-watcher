@@ -71,11 +71,10 @@ def price_to_str(price: float) -> str:
 
 
 def main():
+
     epd = EPD()
-    epd.init(1)
-    epd.Clear()
-    
-    
+    epd.init(epd.FULL_UPDATE)
+    epd.Clear(0xFF)
 
     img = Image.new("1", (epd.width, epd.height), 255)
     font = ImageFont.truetype("OpenSans-Regular.ttf", 20)
