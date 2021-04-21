@@ -14,6 +14,7 @@ import math
 import logging
 import requests
 
+logging.basicConfig(level=logging.DEBUG)
 
 def fetch_ohlc(symbol: str) -> List[Tuple[float, ...]]:
     res = requests.get(
