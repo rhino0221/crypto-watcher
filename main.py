@@ -1,6 +1,7 @@
 # TODO: Uncomment the lcd_1in44 line and comment the lcd_stub one if you want to run it on the display
 # from lcd_1in44 import LCD
-from lcd_stub import LCD
+# from lcd_stub import LCD
+from epd2in13_V2 import EPD
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -70,11 +71,13 @@ def price_to_str(price: float) -> str:
 
 
 def main():
-    lcd = LCD()
-    lcd.LCD_Init()
-    lcd.LCD_Clear()
+    epd = EPD()
+    epd.init(1)
+    epd.Clear()
+    
+    
 
-    img = Image.new("1", (lcd.width, lcd.height), 255)
+    img = Image.new("1", (epd.width, epd.height), 255)
     font = ImageFont.truetype("OpenSans-Regular.ttf", 20)
     font_small = ImageFont.truetype("OpenSans-Regular.ttf", 16)
     font_tiny = ImageFont.truetype("OpenSans-Regular.ttf", 12)
@@ -83,7 +86,7 @@ def main():
     while True:
 
         draw = ImageDraw.Draw(img)
-        draw.rectangle((0, 0, lcd.width, lcd.height), fill=0)
+        draw.rectangle((0, 0, epd.width, epd.height), fill=0)
         
         #BTC
         price, diff, ohlc = fetch_crypto_data("btcusdt")
@@ -123,7 +126,7 @@ def main():
         draw.text((6, 106), text=datetime.datetime.now(timezone).strftime("%Y-%m-%d %H:%M:%S"),
                   font=font_tiny, fill=1)
 
-        lcd.LCD_ShowImage(img)
+        epd.display(img)
         time.sleep(30)
 
 
