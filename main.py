@@ -1,6 +1,6 @@
 # TODO: Uncomment the epd_2in13_V2 line and comment the epd_stub one if you want to run it on the display
-# from epd_stub import LCD
-from epd2in13_V2 import EPD
+from epd_stub import EPD
+#from epd2in13_V2 import EPD
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -92,6 +92,7 @@ def main():
         draw.rectangle((0, 0, epd.height, epd.width), fill=0)
         
         #BTC
+        logging.info("Fetching BTC...")
         price, diff, ohlc = fetch_crypto_data("btcusdt")
         
         draw.text((8, 5), text="BTC {}$".format(
@@ -109,6 +110,7 @@ def main():
         render_ohlc_data(18, ohlc, draw)
         
         #ETH
+        logging.info("Fetching ETH...")
         price, diff, ohlc = fetch_crypto_data("ethusdt")
         
         draw.text((130, 5), text="ETH {}$".format(
@@ -129,6 +131,7 @@ def main():
         draw.text((6, 106), text=datetime.datetime.now(timezone).strftime("%Y-%m-%d %H:%M:%S"),
                   font=font_tiny, fill=1)
 
+        logging.info("Sending image to display...")
         epd.display(epd.getbuffer(img))
         time.sleep(30)
 
