@@ -81,7 +81,7 @@ def main():
     epd.Clear(0xFF)
 
     logging.info("Starting...")
-    img = Image.new("1", (epd.width, epd.height), 255)
+    img = Image.new("1", (epd.height, epd.width), 255)
     font = ImageFont.truetype("OpenSans-Regular.ttf", 20)
     font_small = ImageFont.truetype("OpenSans-Regular.ttf", 16)
     font_tiny = ImageFont.truetype("OpenSans-Regular.ttf", 12)
@@ -90,7 +90,7 @@ def main():
     while True:
 
         draw = ImageDraw.Draw(img)
-        draw.rectangle((0, 0, epd.width, epd.height), fill=0)
+        draw.rectangle((0, 0, epd.height, epd.width), fill=0)
         
         #BTC
         price, diff, ohlc = fetch_crypto_data("btcusdt")
