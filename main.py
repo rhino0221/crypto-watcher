@@ -135,3 +135,12 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+except IOError as e:
+    logging.info(e)
+    
+except KeyboardInterrupt:    
+    logging.info("ctrl + c:")
+    epd2in13_V2.epdconfig.module_exit()
+    exit()
